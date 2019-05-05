@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Övning - Lektion 3</title>
+    <style>
+        .wrapper {
+            width: 70%;
+            margin: auto;
+        }
+
+        label {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        form {
+            padding: 10%;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="wrapper">
+    <h3>Övning 2</h3>
+
+    <ol>
+        <li>Skapa en HTML-fil med ett formulär. Formuläret skall ha två fält: username och password, samt en
+            submitknapp. Skriv ett javascript som tar formulärdatan och skickar den till en PHP-fil.</li> <br>
+
+        <li>PHP-filen ska kolla om username och password har skickats. Om det är rätt användarnamn och lösenord (välj
+            något själv du tycker passar), så skall PHP-filen skicka ett svar i JSON-format som berättar att användaren
+            har lyckats logga in. Om det är fel användarnamn och lösenord skall PHP-filen istället skicka en
+            403-respons.
+        </li>
+        <br>
+
+        <li>Skriv ett tillägg till ditt javascript som handskas med svaret från PHP-filen. Om du får ett svar som säger
+            att inloggningen gick rätt skall du dölja ditt loginformulär, och istället visa ett meddelande som säger att
+            användaren lyckats logga in. Om du får ett 403-svar skall du istället visa ett felmeddelande.</li><br>
+
+        <li>Skriv ett tillägg till din javascript-kod som när användaren lyckats logga in så finns en knapp med texten:
+            "Hämta meddelanden" eller liknande. När användaren klickar på knappen skall du skicka en förfrågan till din
+            PHP-fil om att hämta meddelanden (du kan t.ex. skicka en GET till URLen api.php?messages=true eller något i
+            den stilen). </li><br>
+
+        <li>Skriv kod i din PHP-sida som kollar om meddelanden skall hämtas, och i sådana fall svara med JSON med en
+            array med meddelanden.</li><br>
+
+        <li>I din javascript-kod ska du nu lägga till kod som handskas med meddelandena från PHP-sidan, och skriver ut
+            dem i en UL-lista.</li><br>
+    </ol>
+
+    <form action="form_2.php" method="POST" id="loginform">
+        <label for="username">Username:</label>
+        <input type="text" name="username" placeholder="Username"> <br>
+
+        <label for="password">Password 2:</label>
+        <input type="password" name="password" id="pass"> <br>
+
+        <input type="submit" value="Send">
+    </form>
+
+    <div id="dashboard" class="hidden">
+        <h1>Welcome <span id="user"></span></h1>
+        <button type="button" id="message">Visa meddelande</button>
+    </div>
+
+    <div id="error" class="hidden">
+        <h1>Inloggning misslyckad</h1>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginform');
+        const dashBoard = document.getElementById('dashboard');
+        const error = document.getElementById('error');
+        const userOutPut = document.getElementById('user');
+        const button = document.getElementById('message');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            /* FormData är ett enkelt sätt att konstruera key/value par av informationen som man får ur forms och inputs.*/
+            const formData = new FormData(loginForm);
+            fetch('form_2.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) { throw Error(response.statusText); }
+                    return response.json();
+                })
+                .then(data => {
+                    loginForm.classList.add('hidden');
+                    dashBoard.classList.remove('hidden');
+                    userOutPut.textContent = data.user;
+                    button.classList.remove('hidden');
+                })
+                .catch(err => {
+                    error.classList.remove('hidden');
+                })
+        });
+
+        message.addEventListener('click', (e) => {
+            e.preventDefault();
+            fetch('message.php?messages=true')
+            // responsen för ok är 200, om den inte får det så skickas den direkt till catch
+                .then(response => {
+                    if (!response.ok) { throw Error(response.statusText); }
+                    return response.json();
+                })
+                .then(data => {
+                    //Skapar början på listan
+                    const myUl = document.createElement('ul');
+                    console.log(myUl); // Varför är den inte tom?
+                    for (let i = 0; i < data.messages.length; i++) {
+                        const myLi = document.createElement('li');
+                        myLi.textContent = data.messages[i];
+                        myUl.appendChild(myLi);
+                    }
+                    dashBoard.appendChild(myUl);
+                    console.log(data);
+                })
+                .catch(err => {
+                    error.classList.remove('hidden');
+                })
+
+        })
+
+    </script>
+
+</body>
+
+</html>

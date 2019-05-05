@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Övningar - lektion 3</title>
+    <style>
+        .wrapper {
+            width: 80%;
+            margin: auto;
+        }
+
+        label {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        form {
+            padding: 10%;
+        }
+    </style>
+</head>
+
+<body class="wrapper">
+    <h1>Formulär</h1>
+    <h3>Övning 1</h3>
+    <ol>
+        <li>Skapa ett formulär i en html-fil. I formuläret ska man kunna fylla i information i textrutor. Närmare
+            bestämt: användarnamn, födelsedatum och favorit css-egenskap. Det ska också finnas en submit-knapp. Skapa även en
+            php-fil som heter form.php som ska ta emot denna information. Gör som exemplet ovan och få det att fungera så att du kan skicka
+            informationen till form.php och att det skrivs ut på sidan i stil med: "Hej användarnamn, du är född den
+            1975-03-22. Din favoritegenskap är box-shadow. Nice."</li> <br>
+
+        <li>Lägg även till en extra input som kollar om användaren har skrivit in rätt lösenord. Om fel lösen skrivs in
+            så ska denna bild visas: https://media.giphy.com/media/3ohzdQ1IynzclJldUQ/giphy.gif. Annars ska all information visas upp
+            som tidigare.</li><br>
+
+        <li>Lägg till en till koll om både lösenordet är rätt samt om användaren är minst 25 år så får användaren se
+            sidan. Annars ska bilden visas. Här kan man t.ex. använda hjälpfunktionen strtotime()</li><br>
+
+        <li>Testa att ändra metoden på något av dina formulär till GET. Vad händer? Ser du någon skillnad någonstans?
+            Varför/Varför inte ska man använda GET istället för POST?</li><br>
+
+        <li>Använd de mindre vanliga input-typerna. använd t.ex. type="color" och skicka med en färg i ditt formulär.
+            Färgen ska sedan användas på nästa sida: form.php. Sätt bakgrundsfärgen till det som användaren har skrivit in t.ex.
+        </li><br>
+    </ol>
+
+
+    <form action="form.php" method="POST">
+        <label for="username">Användarnamn</label>
+        <input type="text" name="username" placeholder="Förnamn & Efternamn"> <br>
+
+        <label for="password">Lösenord</label>
+        <input type="password" name="password" placeholder="Lösenord"> <br>
+
+        <label for="birthdate">Födelsedatum</label>
+        <input type="text" name="birthdate" placeholder="YYYY-MM-DD"> <br>
+
+        <label for="favvocss">Favorit CSS-egenskap</label>
+        <input type="text" name="favvocss"> <br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+</body>
+
+</html>

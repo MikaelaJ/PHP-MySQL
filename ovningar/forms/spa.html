@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Single Page Application</title>
+    <style>
+        .hidden{
+            display: none;
+        };
+    
+    </style>
+</head>
+<body>
+    <form id="loginform">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username"> <br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="username" name="username"> <br>
+
+        <input type="submit" value="log in">
+    </form>
+
+    <div id="dashboard" class="hidden">
+        <h1>Welcome <span id="user"></span></h1>
+    </div>
+
+    <!-- HTML är blocking, därför lägger man script sist -->
+    <script type="application/javascript">
+/* The FormData interface provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to "multipart/form-data". */
+
+    /* JavaScript som anropar en server */
+    const loginForm = document.getElementById('loginform');
+    const dashBoard = document.getElementById('dashboard');
+    const userOutPut = document.getElementById('user')
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(loginForm);
+        fetch('api.php', {
+            method: 'POST',
+            body: formData
+        }) // kodstandard, tänk på felhantering hela tiden.
+        .then(response => {
+            if (!response.ok) {throw Error(response.statusText);}
+            return response.json();
+        })
+        .then(data => {
+            loginForm.classList.add('hidden');
+            dashBoard.classList.add('hidden');
+            userOutPut.textContent = data.user;
+          console.log(data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+        
+    });
+    
+    </script>
+</body>
+</html>
